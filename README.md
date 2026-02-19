@@ -8,13 +8,13 @@ A desktop application for finding and replacing text across Microsoft Office doc
 - **Safe Replace**: Create modified copies while preserving original files
 - **Dry Run Mode**: Preview changes before applying them
 - **Case Sensitivity**: Optional case-sensitive matching
-- **Cross-Platform**: Works on macOS and Windows
+- **Windows App**: Portable executable—no installation required
 
 ## Installation
 
-### Download Pre-built Releases
+### Download Pre-built Release
 
-Download the latest release for your platform from the [Releases page](https://github.com/pubino/across-the-office/releases).
+Download the latest Windows release from the [Releases page](https://github.com/pubino/across-the-office/releases).
 
 ### Build from Source
 
@@ -29,8 +29,8 @@ npm install
 # Run the application
 npm start
 
-# Build for your platform
-npm run dist
+# Build for Windows
+npm run dist:win
 ```
 
 ## Usage
@@ -46,42 +46,24 @@ npm run dist
 
 Modified files are saved with `_modified_by_ato_TIMESTAMP` suffix, leaving originals untouched.
 
-## Unsigned Releases
+## Code Signing
 
-The pre-built releases are **not code-signed**. On macOS, you may see a warning that the app is from an unidentified developer. To open it:
+The pre-built releases are **not code-signed**. If your organization requires signed applications, you can build and sign the app yourself:
 
-1. Right-click (or Control-click) the app
-2. Select "Open" from the context menu
-3. Click "Open" in the dialog that appears
+1. Obtain a code signing certificate from a trusted Certificate Authority (e.g., DigiCert, Sectigo, or SSL.com)
 
-On Windows, you may see a SmartScreen warning. Click "More info" and then "Run anyway".
-
-### Building Signed Releases
-
-If you require signed applications (for enterprise deployment or to avoid security warnings), you can build and sign the app yourself:
-
-**macOS:**
-```bash
-# Set your signing identity
-export CSC_NAME="Developer ID Application: Your Name (TEAM_ID)"
-
-# Build signed app
-npm run dist
+2. Set your certificate environment variables:
+```cmd
+set CSC_LINK=path\to\certificate.pfx
+set CSC_KEY_PASSWORD=your-password
 ```
 
-You'll need an Apple Developer account and valid Developer ID certificate.
-
-**Windows:**
-```bash
-# Set your certificate path and password
-export CSC_LINK="path/to/certificate.pfx"
-export CSC_KEY_PASSWORD="your-password"
-
-# Build signed app
-npm run dist
+3. Build the signed application:
+```cmd
+npm run dist:win
 ```
 
-You'll need a code signing certificate from a trusted Certificate Authority.
+The signed executable will be created in the `dist` folder.
 
 ## Development
 
@@ -95,8 +77,8 @@ npm start
 # Run tests
 npm test
 
-# Build distributable packages
-npm run dist
+# Build Windows executable
+npm run dist:win
 ```
 
 ## How It Works

@@ -28,7 +28,13 @@
   },
   "devDependencies": {
     "electron": "^40.4.1",
-    "electron-builder": "^25.1.8"
+    "electron-builder": "^26.8.1"
+  },
+  "overrides": {
+    "@electron/asar": "^4.0.1",
+    "glob": "^13.0.5",
+    "rimraf": "^6.0.1",
+    "inflight": "npm:lru-cache@^11.0.0"
   },
   "build": {
     "appId": "edu.princeton.across-the-office",
@@ -63,18 +69,10 @@
     "win": {
       "target": [
         {
-          "target": "nsis",
-          "arch": ["x64"]
-        },
-        {
           "target": "portable",
           "arch": ["x64"]
         }
       ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
     }
   }
 }
