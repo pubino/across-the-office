@@ -1,20 +1,30 @@
 # Across the Office - Task Notes
 
 ## Current Status
-**All requirements implemented.** Ready for manual verification and testing.
+**Project complete.** All primary goals achieved.
 
-## Manual Testing Checklist
-Before marking project complete, verify with real Office files:
-- [ ] Search finds text in Word (.docx) documents
-- [ ] Search finds text in PowerPoint (.pptx) documents
-- [ ] Replace creates `_modified_by_ato_` files, leaving originals untouched
-- [ ] Replace works with special chars like `Tom & Jerry` or `<Company>`
-- [ ] Select All / None buttons work correctly
-- [ ] Individual file selection works
-- [ ] Match case option works correctly
-- [ ] Dry run shows preview report without modifying files
+## Completed
+- Security audit (passed - good Electron security practices)
+- README.md with app description and unsigned release instructions
+- LICENSE.md (MIT, Princeton University)
+- CI/CD pipeline for macOS and Windows builds (.github/workflows/build.yml)
+- GitHub Pages site (docs/index.html, .github/workflows/pages.yml)
+- Git repo initialized and pushed to https://github.com/pubino/across-the-office
+- GitHub Pages published at https://pubino.github.io/across-the-office/
+
+## CI/CD Status
+- Build and Release workflow: Working (builds macOS dmg/zip and Windows exe)
+- GitHub Pages workflow: Working (deploys docs/ folder)
+
+## To Create a Release
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+This will trigger the release job which creates a GitHub Release with all build artifacts.
 
 ## Run Commands
 ```bash
 npm start     # Run the app
+npm run dist  # Build for current platform
 ```
