@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <title>Across the Office</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 5px;
+      font-size: 24px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .input-section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    .input-group input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .input-group input[type="text"]:focus {
+      outline: none;
+      border-color: #0066cc;
+    }
+
+    .checkbox-group {
+      margin-bottom: 10px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-weight: normal;
+      color: #555;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .folder-select {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .folder-select input {
+      flex: 1;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary {
+      background: #0066cc;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0055aa;
+    }
+
+    .btn-primary:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #666;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #555;
+    }
+
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #218838;
+    }
+
+    .btn-success:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .results-section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: none;
+    }
+
+    .results-section.visible {
+      display: block;
+    }
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .results-header h2 {
+      font-size: 18px;
+      color: #333;
+    }
+
+    .selection-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .selection-controls button {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .file-list {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #eee;
+      border-radius: 4px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      transition: background 0.2s;
+    }
+
+    .file-item:last-child {
+      border-bottom: none;
+    }
+
+    .file-item:hover {
+      background: #f8f9fa;
+    }
+
+    .file-item input[type="checkbox"] {
+      margin-right: 12px;
+      width: 18px;
+      height: 18px;
+    }
+
+    .file-info {
+      flex: 1;
+    }
+
+    .file-name {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .file-path {
+      font-size: 12px;
+      color: #888;
+      margin-top: 2px;
+      word-break: break-all;
+    }
+
+    .file-path.clickable {
+      color: #0066cc;
+      cursor: pointer;
+    }
+
+    .file-path.clickable:hover {
+      text-decoration: underline;
+    }
+
+    .file-type {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-left: 10px;
+    }
+
+    .file-type.word {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .file-type.powerpoint {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .match-count {
+      font-size: 12px;
+      color: #666;
+      margin-left: 10px;
+    }
+
+    .replace-section {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .replace-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .status-message {
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .status-message.visible {
+      display: block;
+    }
+
+    .status-message.success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-message.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .status-message.info {
+      background: #cce5ff;
+      color: #004085;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 15px;
+    }
+
+    .loading.visible {
+      display: block;
+    }
+
+    .progress-container {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      padding: 15px;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .progress-phase {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .progress-bar-container {
+      height: 6px;
+      background: #e9ecef;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #0066cc;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+
+    .progress-bar.indeterminate {
+      width: 30%;
+      animation: indeterminate 1.5s infinite ease-in-out;
+    }
+
+    @keyframes indeterminate {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(400%); }
+    }
+
+    .progress-details {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #0066cc;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 40px;
+      color: #888;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Across the Office</h1>
+    <p class="subtitle">Find text in Word and PowerPoint files, and create modified replacements</p>
+
+    <div class="input-section">
+      <div class="input-group">
+        <label for="searchText">Find:</label>
+        <input type="text" id="searchText" placeholder="Enter text to find...">
+      </div>
+
+      <div class="input-group">
+        <label for="replaceText">Replace with:</label>
+        <input type="text" id="replaceText" placeholder="Enter replacement text...">
+      </div>
+
+      <div class="input-group checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="matchCase" checked>
+          <span>Match case</span>
+        </label>
+      </div>
+
+      <div class="input-group">
+        <label>Target Folder:</label>
+        <div class="folder-select">
+          <input type="text" id="folderPath" readonly placeholder="No folder selected">
+          <button class="btn btn-secondary" id="selectFolderBtn">Browse...</button>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-primary" id="searchBtn" disabled>Search</button>
+      </div>
+
+      <div class="loading" id="searchLoading">
+        <div class="progress-container">
+          <div class="progress-header">
+            <div class="spinner"></div>
+            <span class="progress-phase" id="progressPhase">Scanning folders...</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <div class="progress-details" id="progressDetails"></div>
+        </div>
+      </div>
+
+      <div class="status-message" id="statusMessage"></div>
+    </div>
+
+    <div class="results-section" id="resultsSection">
+      <div class="results-header">
+        <h2>Found Files (<span id="resultCount">0</span>)</h2>
+        <div class="selection-controls">
+          <button class="btn btn-secondary" id="selectAllBtn">Select All</button>
+          <button class="btn btn-secondary" id="selectNoneBtn">Select None</button>
+        </div>
+      </div>
+
+      <div class="file-list" id="fileList"></div>
+
+      <div class="replace-section">
+        <div class="replace-controls">
+          <button class="btn btn-success" id="replaceBtn" disabled>Replace in Selected Files</button>
+          <label class="checkbox-label">
+            <input type="checkbox" id="dryRun">
+            <span>Dry run (preview only)</span>
+          </label>
+        </div>
+        <div class="loading" id="replaceLoading">
+          <div class="spinner"></div>
+          <span>Replacing text...</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

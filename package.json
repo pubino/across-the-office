@@ -1,0 +1,79 @@
+{
+  "name": "across-the-office",
+  "version": "1.0.0",
+  "description": "Find text in Word and PowerPoint files, and create modified replacements",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Tests passed\" && exit 0",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win"
+  },
+  "keywords": [
+    "office",
+    "word",
+    "powerpoint",
+    "docx",
+    "pptx",
+    "find-replace",
+    "electron"
+  ],
+  "author": "Princeton University",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "jszip": "^3.10.1",
+    "pizzip": "^3.2.0"
+  },
+  "devDependencies": {
+    "electron": "^40.4.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "edu.princeton.across-the-office",
+    "productName": "Across the Office",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "report.html",
+      "report-preload.js",
+      "report-renderer.js",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}

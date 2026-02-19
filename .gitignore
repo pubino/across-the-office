@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+out/
+
+# macOS
+.DS_Store
+*.dmg
+
+# Windows
+Thumbs.db
+*.exe
+*.msi
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+
+# Packaging
+*.blockmap
+*.yml
+!.github/**/*.yml
+
+# Certificates
+*.pfx
+*.p12
+*.cer
