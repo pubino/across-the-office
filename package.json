@@ -33,6 +33,7 @@
   "build": {
     "appId": "edu.princeton.across-the-office",
     "productName": "Across the Office",
+    "publish": null,
     "directories": {
       "output": "dist"
     },

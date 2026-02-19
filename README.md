@@ -115,10 +115,3 @@ Office documents (`.docx` and `.pptx`) are ZIP archives containing XML files. Th
 - The application runs with minimal permissions
 - No network access required
 
-## License
-
-[MIT License](LICENSE.md) - Copyright (c) 2026 Princeton University
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit issues and pull requests.
