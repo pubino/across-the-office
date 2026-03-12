@@ -1,30 +1,40 @@
 # Across the Office - Task Notes
 
 ## Current Status
-**Project complete.** All primary goals achieved.
+**Windows-only release.** Signing via Azure Artifact Signing (formerly Trusted Signing).
 
-## Completed
-- Security audit (passed - good Electron security practices)
-- README.md with app description and unsigned release instructions
-- LICENSE.md (MIT, Princeton University)
-- CI/CD pipeline for macOS and Windows builds (.github/workflows/build.yml)
-- GitHub Pages site (docs/index.html, .github/workflows/pages.yml)
-- Git repo initialized and pushed to https://github.com/pubino/across-the-office
-- GitHub Pages published at https://pubino.github.io/across-the-office/
+## Azure Artifact Signing Setup
+
+The CI workflow signs the Windows exe using Azure Artifact Signing. Three GitHub secrets are required:
+- `AZURE_TENANT_ID`
+- `AZURE_CLIENT_ID`
+- `AZURE_CLIENT_SECRET` (App Registration client secret, **expires every 90 days**)
+
+### App Registration Role Assignment
+The App Registration's service principal must have the **"Artifact Signing Certificate Profile Signer"** role on the Trusted Signing Account (`orfe-signing-acct`):
+1. Azure portal → Trusted Signing Account → Access control (IAM)
+2. Add role assignment → **Artifact Signing Certificate Profile Signer**
+3. Assign to the App Registration's service principal
+
+### Rotating the Client Secret (every 90 days)
+1. Azure portal → App Registrations → your app → Certificates & secrets
+2. Create a new client secret
+3. Update the GitHub secret: `gh secret set AZURE_CLIENT_SECRET`
+4. Delete the old secret in Azure
 
 ## CI/CD Status
-- Build and Release workflow: Working (builds macOS dmg/zip and Windows exe)
+- Build and Release workflow: Windows portable exe only (macOS disabled)
 - GitHub Pages workflow: Working (deploys docs/ folder)
+- Signing: Automatic when Azure secrets are present, unsigned otherwise
 
 ## To Create a Release
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
+git push origin vX.Y.Z
 ```
-This will trigger the release job which creates a GitHub Release with all build artifacts.
 
 ## Run Commands
 ```bash
-npm start     # Run the app
-npm run dist  # Build for current platform
+npm start         # Run the app
+npm run dist:win  # Build for Windows
 ```

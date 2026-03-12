@@ -393,19 +393,21 @@
   <section class="signing">
     <div class="container">
       <h2>Code Signing</h2>
-      <p>The pre-built releases are not code-signed. If your organization requires signed applications, you can build and sign the app yourself.</p>
+      <p>Releases are signed via <a href="https://azure.microsoft.com/en-us/products/artifact-signing">Azure Artifact Signing</a>. To build a signed version locally:</p>
       <div class="signing-instructions">
         <h3>Building a Signed Version</h3>
         <ol>
-          <li>Obtain a code signing certificate from a trusted Certificate Authority (e.g., DigiCert, Sectigo, or SSL.com)</li>
+          <li>Set up an Azure Artifact Signing account and certificate profile</li>
+          <li>Register an App in Azure Entra ID and assign it the <strong>Artifact Signing Certificate Profile Signer</strong> role on the signing account</li>
           <li>Clone the repository and install dependencies:
             <pre>git clone https://github.com/pubino/across-the-office.git
 cd across-the-office
 npm install</pre>
           </li>
-          <li>Set your certificate environment variables:
-            <pre>set CSC_LINK=path\to\certificate.pfx
-set CSC_KEY_PASSWORD=your-password</pre>
+          <li>Set your Azure environment variables:
+            <pre>set AZURE_TENANT_ID=your-tenant-id
+set AZURE_CLIENT_ID=your-client-id
+set AZURE_CLIENT_SECRET=your-client-secret</pre>
           </li>
           <li>Build the signed application:
             <pre>npm run dist:win</pre>

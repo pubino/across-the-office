@@ -48,22 +48,38 @@ Modified files are saved with `_modified_by_ato_TIMESTAMP` suffix, leaving origi
 
 ## Code Signing
 
-The pre-built releases are **not code-signed**. If your organization requires signed applications, you can build and sign the app yourself:
+Releases are signed via [Azure Artifact Signing](https://azure.microsoft.com/en-us/products/artifact-signing) (formerly Trusted Signing). The CI workflow signs automatically when the required GitHub secrets are configured.
 
-1. Obtain a code signing certificate from a trusted Certificate Authority (e.g., DigiCert, Sectigo, or SSL.com)
+### CI Signing Setup
 
-2. Set your certificate environment variables:
+1. Create an Azure Artifact Signing account and certificate profile
+2. Register an App in Azure Entra ID (App Registrations)
+3. Assign the **"Artifact Signing Certificate Profile Signer"** role to the App Registration on the signing account (Access control → Add role assignment)
+4. Create a client secret for the App Registration (note: secrets expire — see below)
+5. Add these GitHub repository secrets (Settings → Secrets → Actions):
+   - `AZURE_TENANT_ID` — from Azure Entra ID overview
+   - `AZURE_CLIENT_ID` — from the App Registration overview
+   - `AZURE_CLIENT_SECRET` — the client secret value
+
+### Rotating the Client Secret
+
+The Azure App Registration client secret has an expiry (e.g., 90 days). To rotate:
+
+1. Azure portal → App Registrations → your app → Certificates & secrets
+2. Create a new client secret
+3. Update the GitHub secret: `gh secret set AZURE_CLIENT_SECRET`
+4. Delete the old secret in Azure
+
+### Local Signing
+
+To build a signed executable locally, set the Azure environment variables and run:
+
 ```cmd
-set CSC_LINK=path\to\certificate.pfx
-set CSC_KEY_PASSWORD=your-password
-```
-
-3. Build the signed application:
-```cmd
+set AZURE_TENANT_ID=your-tenant-id
+set AZURE_CLIENT_ID=your-client-id
+set AZURE_CLIENT_SECRET=your-client-secret
 npm run dist:win
 ```
-
-The signed executable will be created in the `dist` folder.
 
 ## Development
 
